@@ -5,6 +5,7 @@ from MushroomClassification.logger import logging
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from pathlib import Path
 
 from dataclasses import dataclass
 
@@ -22,14 +23,19 @@ class DataIngestion:
         try:
             logging.info("Data ingestion has started")
 
-            df=pd.read_csv(os.path.join("notebooks/data","mushrooms.csv"))
+            # df=pd.read_csv(Path(os.path.join("notebooks/data","mushrooms.csv")))
+            df=pd.read_csv(r"C:\Users\Vijai vikram\Desktop\python_programming\Mushroom Classification\notebooks\data\mushrooms.csv")
 
-            os.makedirs(os.path.dirname(self.get_data_ingestion_config.raw_data),exist_ok=True)
+            os.makedirs(os.path.dirname(os.path.join(self.get_data_ingestion_config.raw_data)),exist_ok=True)
+            
             df.to_csv(self.get_data_ingestion_config.raw_data,index=False,header=True)
 
             train_set,test_set=train_test_split(df,test_size=0.20,random_state=42)
+            
             train_set.to_csv(self.get_data_ingestion_config.train_path,index=False,header=True)
+            
             test_set.to_csv(self.get_data_ingestion_config.test_path,index=False,header=True)
+            
             logging.info("files saved to artifacts")
 
             return (self.get_data_ingestion_config.train_path,self.get_data_ingestion_config.test_path)
